@@ -1,0 +1,23 @@
+[package]
+name = "alluno-hinpud-sys"
+version = "1.0.0"
+edition = "2021"
+description = "Rust bindings for Alluno Hardware Input Driver (AllunoHInpuD)"
+license = "MIT"
+authors = ["Adidharma Torutama <adidharmatoru@alluno.io>"]
+repository = "https://github.com/alluno-io/alluno-hinpud-sys"
+
+[[bin]]
+name = "alluno-hinpud-test"
+path = "src/bin/test.rs"
+
+[dependencies]
+[target.'cfg(target_os = "windows")'.dependencies]
+windows = { version = "0.62", features = [
+    "Win32_Foundation",
+    "Win32_Security",
+    "Win32_Storage_FileSystem",
+    "Win32_System_IO",
+    "Win32_UI_WindowsAndMessaging",
+    "Win32_UI_Input_KeyboardAndMouse",
+] }
