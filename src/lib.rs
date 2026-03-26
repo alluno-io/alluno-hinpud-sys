@@ -275,7 +275,7 @@ pub struct AllunoHinpudKeyboard {
 impl AllunoHinpudKeyboard {
     /// Open the keyboard control device.
     pub fn open() -> Option<Self> {
-        open_device("\\\\.\\AllunoHInpuDKbd\0").map(|h| Self { handle: h })
+        open_device("\\\\.\\KeyboardAllunoHInpuD\0").map(|h| Self { handle: h })
     }
 
     /// Send raw input data to the driver. Returns bytes consumed.
@@ -369,7 +369,7 @@ pub struct AllunoHinpudMouse {
 impl AllunoHinpudMouse {
     /// Open the mouse control device.
     pub fn open() -> Option<Self> {
-        open_device("\\\\.\\AllunoHInpuDMou\0").map(|h| Self { handle: h })
+        open_device("\\\\.\\MouseAllunoHInpuD\0").map(|h| Self { handle: h })
     }
 
     /// Send raw input data to the driver. Returns bytes consumed.
