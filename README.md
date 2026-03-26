@@ -22,14 +22,14 @@ alluno-hinpud-sys = "1.0"
 use alluno_hinpud_sys::*;
 
 // Keyboard
-let kbd = AllunoHinpud::open_keyboard().expect("driver not installed");
+let kbd = AllunoHinpudKeyboard::open().expect("driver not installed");
 kbd.send_key(scan_code::A).unwrap();           // press + release
 kbd.press_key(scan_code::LEFT_SHIFT).unwrap();  // hold shift
 kbd.send_key(scan_code::A).unwrap();            // Shift+A
 kbd.release_key(scan_code::LEFT_SHIFT).unwrap();
 
 // Mouse
-let mou = AllunoHinpud::open_mouse().expect("driver not installed");
+let mou = AllunoHinpudMouse::open().expect("driver not installed");
 mou.send_move(10, 10, false).unwrap();                             // relative move
 mou.send_move(32767, 32767, true).unwrap();                        // absolute move (center)
 mou.send_button(mouse_button_flags::LEFT_BUTTON_DOWN).unwrap();    // left click down
@@ -38,7 +38,7 @@ mou.send_button(mouse_button_flags::LEFT_BUTTON_UP).unwrap();      // left click
 
 ## API
 
-### Keyboard (`AllunoHinpud::open_keyboard()`)
+### Keyboard (`AllunoHinpudKeyboard::open()`)
 
 | Method | Description |
 |---|---|
@@ -47,12 +47,14 @@ mou.send_button(mouse_button_flags::LEFT_BUTTON_UP).unwrap();      // left click
 | `release_key(scan_code)` | Release a key (key up) |
 | `send_key_raw(scan_code, flags)` | Send raw keyboard event with custom flags |
 
-### Mouse (`AllunoHinpud::open_mouse()`)
+### Mouse (`AllunoHinpudMouse::open()`)
 
 | Method | Description |
 |---|---|
 | `send_move(x, y, absolute)` | Move mouse (relative or absolute 0-65535) |
 | `send_button(button_flags)` | Send mouse button event |
+| `send_wheel(delta)` | Vertical scroll (120 = one notch up, -120 = down) |
+| `send_hwheel(delta)` | Horizontal scroll (120 = right, -120 = left) |
 | `send_raw(data)` | Send raw input data bytes |
 
 ### Constants

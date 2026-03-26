@@ -99,7 +99,7 @@ mod test_impl {
     fn send_via_driver() {
         println!("\n=== AllunoHInpuD Driver Test ===");
 
-        let kbd = match AllunoHinpud::open_keyboard() {
+        let kbd = match AllunoHinpudKeyboard::open() {
             Some(k) => k,
             None => {
                 println!("ERROR: Could not open keyboard driver.");
@@ -108,10 +108,11 @@ mod test_impl {
             }
         };
 
-        let mou = match AllunoHinpud::open_mouse() {
+        let mou = match AllunoHinpudMouse::open() {
             Some(m) => m,
             None => {
                 println!("ERROR: Could not open mouse driver.");
+                println!("  Is the AllunoHInpuD driver installed?");
                 std::process::exit(1);
             }
         };
@@ -178,6 +179,49 @@ mod test_impl {
         }
         thread::sleep(Duration::from_millis(30));
         match mou.send_button(mouse_button_flags::RIGHT_BUTTON_UP) {
+            Ok(n) => print!(" up({n})"),
+            Err(e) => print!(" ERR:{e}"),
+        }
+        thread::sleep(Duration::from_millis(30));
+        println!();
+
+        // Mouse: wheel
+        print!("  Sending wheel...");
+        match mou.send_wheel(120) {
+            Ok(n) => print!(" up({n})"),
+            Err(e) => print!(" ERR:{e}"),
+        }
+        thread::sleep(Duration::from_millis(30));
+        match mou.send_wheel(-120) {
+            Ok(n) => print!(" down({n})"),
+            Err(e) => print!(" ERR:{e}"),
+        }
+        thread::sleep(Duration::from_millis(30));
+        println!();
+
+        // Mouse: hwheel
+        print!("  Sending hwheel...");
+        match mou.send_hwheel(120) {
+            Ok(n) => print!(" right({n})"),
+            Err(e) => print!(" ERR:{e}"),
+        }
+        thread::sleep(Duration::from_millis(30));
+        match mou.send_hwheel(-120) {
+            Ok(n) => print!(" left({n})"),
+            Err(e) => print!(" ERR:{e}"),
+        }
+        thread::sleep(Duration::from_millis(30));
+        println!();
+
+        // Keyboard: extended key (Right Ctrl = E0 + LEFT_CTRL)
+        println!("--- Extended Keys ---");
+        print!("  Sending RCtrl (E0)...");
+        match kbd.send_key_raw(scan_code::LEFT_CTRL, key_flags::E0) {
+            Ok(n) => print!(" down({n})"),
+            Err(e) => print!(" ERR:{e}"),
+        }
+        thread::sleep(Duration::from_millis(30));
+        match kbd.send_key_raw(scan_code::LEFT_CTRL, key_flags::BREAK | key_flags::E0) {
             Ok(n) => print!(" up({n})"),
             Err(e) => print!(" ERR:{e}"),
         }
