@@ -4,6 +4,7 @@
 //!   alluno-hinpud-test                  Monitor keyboard + mouse events
 //!   alluno-hinpud-test --driver         Send via driver (expect HARDWARE)
 //!   alluno-hinpud-test --sendinput      Send via SendInput (expect INJECTED)
+//!   alluno-hinpud-test --sas            Send Ctrl+Alt+Delete via driver
 
 #[cfg(target_os = "windows")]
 mod test_impl {
@@ -318,6 +319,55 @@ mod test_impl {
         }
     }
 
+    fn send_sas() {
+        println!("\n=== Ctrl+Alt+Delete (SAS) Test ===");
+
+        let kbd = match AllunoHinpudKeyboard::open() {
+            Some(k) => k,
+            None => {
+                println!("ERROR: Could not open keyboard driver.");
+                println!("  Is the AllunoHInpuD driver installed?");
+                std::process::exit(1);
+            }
+        };
+
+        println!("Sending Ctrl+Alt+Delete in 3 seconds...");
+        println!("The Secure Attention Sequence screen should appear.\n");
+        thread::sleep(Duration::from_secs(3));
+
+        // Press Ctrl
+        print!("  LCtrl down...");
+        kbd.press_key(scan_code::LEFT_CTRL).unwrap();
+        thread::sleep(Duration::from_millis(30));
+
+        // Press Alt
+        print!(" LAlt down...");
+        kbd.press_key(scan_code::LEFT_ALT).unwrap();
+        thread::sleep(Duration::from_millis(30));
+
+        // Press Delete (extended key: E0 + 0x53)
+        print!(" Delete down...");
+        kbd.send_key_raw(0x53, key_flags::E0).unwrap();
+        thread::sleep(Duration::from_millis(50));
+
+        // Release all in reverse
+        print!(" Delete up...");
+        kbd.send_key_raw(0x53, key_flags::BREAK | key_flags::E0)
+            .unwrap();
+        thread::sleep(Duration::from_millis(30));
+
+        print!(" LAlt up...");
+        kbd.release_key(scan_code::LEFT_ALT).unwrap();
+        thread::sleep(Duration::from_millis(30));
+
+        print!(" LCtrl up...");
+        kbd.release_key(scan_code::LEFT_CTRL).unwrap();
+        println!(" done.");
+
+        println!("\nIf the Ctrl+Alt+Delete screen appeared, SAS works via HInpuD!");
+        std::process::exit(0);
+    }
+
     fn print_summary(method: &str) {
         let kb_hw = KB_HW.load(Ordering::Relaxed);
         let kb_inj = KB_INJ.load(Ordering::Relaxed);
@@ -364,6 +414,11 @@ mod test_impl {
                 println!("Mode: SendInput baseline (expect [INJECTED])");
                 thread::spawn(send_via_sendinput);
             }
+            "--sas" => {
+                println!("Mode: Ctrl+Alt+Delete (SAS) via driver");
+                send_sas();
+                return;
+            }
             _ => {
                 println!("Mode: Monitor (press keys / move mouse to see flags)");
                 println!("  [HARDWARE] = real hardware or kernel-level emulation");
@@ -371,6 +426,7 @@ mod test_impl {
                 println!("\nUsage:");
                 println!("  alluno-hinpud-test --driver     Test driver (expect HARDWARE)");
                 println!("  alluno-hinpud-test --sendinput  Test SendInput (expect INJECTED)");
+                println!("  alluno-hinpud-test --sas        Send Ctrl+Alt+Delete via driver");
                 println!("\nPress Ctrl+C to exit.\n");
             }
         }

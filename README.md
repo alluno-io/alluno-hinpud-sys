@@ -7,7 +7,7 @@ Provides kernel-level hardware input emulation.
 ## Requirements
 
 - Windows 10/11
-- AllunoHInpuD driver installed (from [alluno-windows-drivers](https://github.com/alluno-io/alluno-windows-drivers))
+- AllunoHInpuD driver installed (from [alluno-hinpud](https://github.com/alluno-io/alluno-hinpud))
 
 ## Usage
 
