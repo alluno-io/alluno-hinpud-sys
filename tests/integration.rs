@@ -7,17 +7,17 @@ use alluno_hinpud_sys::*;
 
 #[test]
 fn test_open_keyboard() {
-    let _ = AllunoHinpudKeyboard::open();
+    let _ = AllunoHinpudKeyboard::new();
 }
 
 #[test]
 fn test_open_mouse() {
-    let _ = AllunoHinpudMouse::open();
+    let _ = AllunoHinpudMouse::new();
 }
 
 #[test]
 fn test_send_key() {
-    let Some(kbd) = AllunoHinpudKeyboard::open() else {
+    let Some(kbd) = AllunoHinpudKeyboard::new() else {
         eprintln!("skipped: driver not installed");
         return;
     };
@@ -26,7 +26,7 @@ fn test_send_key() {
 
 #[test]
 fn test_press_release_key() {
-    let Some(kbd) = AllunoHinpudKeyboard::open() else {
+    let Some(kbd) = AllunoHinpudKeyboard::new() else {
         eprintln!("skipped: driver not installed");
         return;
     };
@@ -36,7 +36,7 @@ fn test_press_release_key() {
 
 #[test]
 fn test_mouse_relative_move() {
-    let Some(mou) = AllunoHinpudMouse::open() else {
+    let Some(mou) = AllunoHinpudMouse::new() else {
         eprintln!("skipped: driver not installed");
         return;
     };
@@ -45,7 +45,7 @@ fn test_mouse_relative_move() {
 
 #[test]
 fn test_mouse_absolute_move() {
-    let Some(mou) = AllunoHinpudMouse::open() else {
+    let Some(mou) = AllunoHinpudMouse::new() else {
         eprintln!("skipped: driver not installed");
         return;
     };
@@ -54,7 +54,7 @@ fn test_mouse_absolute_move() {
 
 #[test]
 fn test_mouse_button() {
-    let Some(mou) = AllunoHinpudMouse::open() else {
+    let Some(mou) = AllunoHinpudMouse::new() else {
         eprintln!("skipped: driver not installed");
         return;
     };
@@ -66,7 +66,7 @@ fn test_mouse_button() {
 
 #[test]
 fn test_mouse_wheel() {
-    let Some(mou) = AllunoHinpudMouse::open() else {
+    let Some(mou) = AllunoHinpudMouse::new() else {
         eprintln!("skipped: driver not installed");
         return;
     };
@@ -76,7 +76,7 @@ fn test_mouse_wheel() {
 
 #[test]
 fn test_mouse_hwheel() {
-    let Some(mou) = AllunoHinpudMouse::open() else {
+    let Some(mou) = AllunoHinpudMouse::new() else {
         eprintln!("skipped: driver not installed");
         return;
     };
@@ -86,7 +86,7 @@ fn test_mouse_hwheel() {
 
 #[test]
 fn test_extended_key() {
-    let Some(kbd) = AllunoHinpudKeyboard::open() else {
+    let Some(kbd) = AllunoHinpudKeyboard::new() else {
         eprintln!("skipped: driver not installed");
         return;
     };

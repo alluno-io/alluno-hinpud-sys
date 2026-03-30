@@ -100,7 +100,7 @@ mod test_impl {
     fn send_via_driver() {
         println!("\n=== AllunoHInpuD Driver Test ===");
 
-        let kbd = match AllunoHinpudKeyboard::open() {
+        let kbd = match AllunoHinpudKeyboard::new() {
             Some(k) => k,
             None => {
                 println!("ERROR: Could not open keyboard driver.");
@@ -109,7 +109,7 @@ mod test_impl {
             }
         };
 
-        let mou = match AllunoHinpudMouse::open() {
+        let mou = match AllunoHinpudMouse::new() {
             Some(m) => m,
             None => {
                 println!("ERROR: Could not open mouse driver.");
@@ -322,7 +322,7 @@ mod test_impl {
     fn send_sas() {
         println!("\n=== Ctrl+Alt+Delete (SAS) Test ===");
 
-        let kbd = match AllunoHinpudKeyboard::open() {
+        let kbd = match AllunoHinpudKeyboard::new() {
             Some(k) => k,
             None => {
                 println!("ERROR: Could not open keyboard driver.");

@@ -7,13 +7,13 @@
 //! ```no_run
 //! use alluno_hinpud_sys::*;
 //!
-//! let kbd = AllunoHinpudKeyboard::open().expect("keyboard driver not installed");
+//! let kbd = AllunoHinpudKeyboard::new().expect("keyboard driver not installed");
 //! kbd.send_key(scan_code::A).unwrap();                               // press + release
 //! kbd.press_key(scan_code::LEFT_SHIFT).unwrap();                     // hold shift
 //! kbd.send_key(scan_code::A).unwrap();                               // Shift+A
 //! kbd.release_key(scan_code::LEFT_SHIFT).unwrap();
 //!
-//! let mou = AllunoHinpudMouse::open().expect("mouse driver not installed");
+//! let mou = AllunoHinpudMouse::new().expect("mouse driver not installed");
 //! mou.send_move(10, 10, false).unwrap();                             // relative move
 //! mou.send_move(32767, 32767, true).unwrap();                        // absolute move (center)
 //! mou.send_button(mouse_button_flags::LEFT_BUTTON_DOWN).unwrap();    // left click down
@@ -274,8 +274,14 @@ pub struct AllunoHinpudKeyboard {
 #[cfg(target_os = "windows")]
 impl AllunoHinpudKeyboard {
     /// Open the keyboard control device.
-    pub fn open() -> Option<Self> {
+    pub fn new() -> Option<Self> {
         open_device("\\\\.\\KeyboardAllunoHInpuD\0").map(|h| Self { handle: h })
+    }
+
+    /// Deprecated alias for [`new()`](Self::new).
+    #[deprecated(note = "use new() instead")]
+    pub fn open() -> Option<Self> {
+        Self::new()
     }
 
     /// Send raw input data to the driver. Returns bytes consumed.
@@ -335,8 +341,13 @@ pub struct AllunoHinpudKeyboard;
 
 #[cfg(not(target_os = "windows"))]
 impl AllunoHinpudKeyboard {
-    pub fn open() -> Option<Self> {
+    pub fn new() -> Option<Self> {
         None
+    }
+
+    #[deprecated(note = "use new() instead")]
+    pub fn open() -> Option<Self> {
+        Self::new()
     }
     pub fn send_key(&self, _: u16) -> Result<(), String> {
         Ok(())
@@ -368,8 +379,14 @@ pub struct AllunoHinpudMouse {
 #[cfg(target_os = "windows")]
 impl AllunoHinpudMouse {
     /// Open the mouse control device.
-    pub fn open() -> Option<Self> {
+    pub fn new() -> Option<Self> {
         open_device("\\\\.\\MouseAllunoHInpuD\0").map(|h| Self { handle: h })
+    }
+
+    /// Deprecated alias for [`new()`](Self::new).
+    #[deprecated(note = "use new() instead")]
+    pub fn open() -> Option<Self> {
+        Self::new()
     }
 
     /// Send raw input data to the driver. Returns bytes consumed.
@@ -493,8 +510,13 @@ pub struct AllunoHinpudMouse;
 
 #[cfg(not(target_os = "windows"))]
 impl AllunoHinpudMouse {
-    pub fn open() -> Option<Self> {
+    pub fn new() -> Option<Self> {
         None
+    }
+
+    #[deprecated(note = "use new() instead")]
+    pub fn open() -> Option<Self> {
+        Self::new()
     }
     pub fn send_move(&self, _: i32, _: i32, _: bool) -> Result<u32, String> {
         Ok(0)
